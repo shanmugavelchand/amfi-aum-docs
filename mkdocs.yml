@@ -1,0 +1,57 @@
+site_name: amfi_aum
+site_description: Python module for fetching Average AUM data from AMFI India
+site_url: https://shanmugavelchand.github.io/amfi-aum-docs/
+repo_url: https://github.com/shanmugavelchand/amfi-aum-docs
+repo_name: shanmugavelchand/amfi-aum-docs
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.instant
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - tables
+  - attr_list
+
+nav:
+  - Home: index.md
+  - Quick Start: quickstart.md
+  - API Reference:
+      - Overview: api/overview.md
+      - get_financial_years: api/get_financial_years.md
+      - get_periods: api/get_periods.md
+      - get_fundwise_data: api/get_fundwise_data.md
+      - get_schemewise_data: api/get_schemewise_data.md
+      - scrape_all: api/scrape_all.md
+      - export_to_csv: api/export_to_csv.md
+      - export_to_excel: api/export_to_excel.md
+  - Data Dictionary: data_dictionary.md
