@@ -4,6 +4,9 @@ site_url: https://shanmugavelchand.github.io/amfi-aum-docs/
 repo_url: https://github.com/shanmugavelchand/amfi-aum-docs
 repo_name: shanmugavelchand/amfi-aum-docs
 
+docs_dir: source
+site_dir: docs
+
 theme:
   name: material
   features:
