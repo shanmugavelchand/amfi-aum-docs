@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>amfi_aum - API Reference</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #1a1a1a;
+      background: #ffffff;
+    }
+
+    /* ---- layout ---- */
+    .page { display: flex; min-height: 100vh; }
+
+    nav {
+      width: 230px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      background: #f5f5f5;
+      border-right: 1px solid #e0e0e0;
+      padding: 32px 0;
+    }
+
+    nav .nav-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #888;
+      padding: 0 20px 12px;
+    }
+
+    nav a {
+      display: block;
+      padding: 6px 20px;
+      color: #333;
+      text-decoration: none;
+      font-size: 14px;
+      border-left: 3px solid transparent;
+    }
+
+    nav a:hover        { background: #ebebeb; }
+    nav a.active       { border-left-color: #0066cc; color: #0066cc; font-weight: 600; }
+    nav .nav-section   { padding: 16px 20px 4px; font-size: 11px; font-weight: 700;
+                         text-transform: uppercase; letter-spacing: 0.06em; color: #aaa; }
+
+    main {
+      flex: 1;
+      max-width: 820px;
+      padding: 48px 56px 80px;
+    }
+
+    /* ---- typography ---- */
+    h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+    h2 { font-size: 20px; font-weight: 700; margin: 48px 0 16px; padding-bottom: 8px;
+         border-bottom: 1px solid #e8e8e8; }
+    h3 { font-size: 16px; font-weight: 700; margin: 32px 0 10px; }
+    p  { margin-bottom: 14px; color: #333; }
+
+    .subtitle { font-size: 16px; color: #555; margin-bottom: 32px; }
+
+    a { color: #0066cc; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ---- badges ---- */
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 3px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .badge-optional { background: #e8f0fe; color: #1a5cc8; }
+    .badge-returns  { background: #e6f4ea; color: #1a6e36; }
+
+    /* ---- function blocks ---- */
+    .fn-block {
+      background: #fafafa;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      margin-bottom: 40px;
+      overflow: hidden;
+    }
+
+    .fn-header {
+      background: #f0f0f0;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 14px 20px;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 14px;
+      word-break: break-all;
+    }
+
+    .fn-header .fn-name { font-weight: 700; color: #0055aa; }
+    .fn-header .fn-param { color: #333; }
+    .fn-header .fn-default { color: #888; }
+
+    .fn-body { padding: 20px; }
+    .fn-body p { margin-bottom: 12px; }
+
+    /* ---- param table ---- */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin: 12px 0 20px;
+    }
+
+    th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+      border-bottom: 2px solid #e0e0e0;
+      padding: 6px 10px;
+    }
+
+    td {
+      padding: 9px 10px;
+      border-bottom: 1px solid #f0f0f0;
+      vertical-align: top;
+    }
+
+    td:first-child {
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 13px;
+      white-space: nowrap;
+      color: #c7254e;
+    }
+
+    td:nth-child(2) { color: #0066cc; font-family: monospace; font-size: 13px; }
+    td:nth-child(3) { color: #555; }
+
+    /* ---- code ---- */
+    pre {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 18px 20px;
+      border-radius: 5px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 12px 0 20px;
+    }
+
+    code {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    }
+
+    pre code { background: none; padding: 0; font-size: inherit; color: inherit; }
+
+    /* inline code */
+    p code, li code, td code {
+      background: #f2f2f2;
+      border-radius: 3px;
+      padding: 1px 5px;
+      font-size: 13px;
+      color: #c7254e;
+    }
+
+    /* ---- column list ---- */
+    .col-list { list-style: none; padding: 0; }
+    .col-list li {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 5px 0;
+      border-bottom: 1px solid #f3f3f3;
+      font-size: 14px;
+    }
+    .col-list li:last-child { border-bottom: none; }
+    .col-name  { font-family: monospace; color: #c7254e; min-width: 290px; }
+    .col-type  { color: #0066cc; font-family: monospace; min-width: 50px; }
+    .col-desc  { color: #555; }
+
+    /* ---- note box ---- */
+    .note {
+      background: #fffbe6;
+      border-left: 3px solid #f0b429;
+      padding: 12px 16px;
+      border-radius: 0 4px 4px 0;
+      margin: 16px 0;
+      font-size: 14px;
+      color: #4a3800;
+    }
+
+    /* ---- syntax highlight approximation ---- */
+    .kw   { color: #569cd6; }   /* keyword   */
+    .fn   { color: #dcdcaa; }   /* function  */
+    .st   { color: #ce9178; }   /* string    */
+    .cm   { color: #6a9955; }   /* comment   */
+    .nb   { color: #4ec9b0; }   /* number    */
+    .op   { color: #d4d4d4; }   /* operator  */
+
+    @media (max-width: 760px) {
+      nav { display: none; }
+      main { padding: 24px 20px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- sidebar -->
+  <nav id="sidebar">
+    <div class="nav-title">amfi_aum</div>
+    <a href="#overview">Overview</a>
+    <a href="#installation">Installation</a>
+    <a href="#quickstart">Quick Start</a>
+    <div class="nav-section">Discovery</div>
+    <a href="#get_financial_years">get_financial_years()</a>
+    <a href="#get_periods">get_periods()</a>
+    <div class="nav-section">Data Fetch</div>
+    <a href="#get_fundwise_data">get_fundwise_data()</a>
+    <a href="#get_schemewise_data">get_schemewise_data()</a>
+    <div class="nav-section">Bulk &amp; Export</div>
+    <a href="#scrape_all">scrape_all()</a>
+    <a href="#export_to_csv">export_to_csv()</a>
+    <a href="#export_to_excel">export_to_excel()</a>
+    <div class="nav-section">Reference</div>
+    <a href="#columns">Column Reference</a>
+    <a href="#ids">ID Lookup</a>
+    <a href="#errors">Error Handling</a>
+  </nav>
+
+  <!-- main content -->
+  <main>
+
+    <!-- ------------------------------------------------------------------ -->
+    <section id="overview">
+      <h1>amfi_aum</h1>
+      <p class="subtitle">
+        A Python module for fetching Average Assets Under Management (AAUM)
+        data from the Association of Mutual Funds in India (AMFI).
+      </p>
+
+      <p>
+        The module wraps the undocumented JSON endpoints used by
+        <a href="https://www.amfiindia.com/aum-data/average-aum" target="_blank">
+        amfiindia.com/aum-data/average-aum</a>. It handles discovery
+        of financial years and periods, downloads the data, and returns
+        clean <code>pandas.DataFrame</code> objects that you can analyse
+        or export.
+      </p>
+
+      <p>
+        Data is available from April 2006 to the present. From December 2010
+        onwards the data is published quarterly; before that it was monthly.
+      </p>
+
+      <p>There are three data modes:</p>
+      <table>
+        <tr><th>Mode</th><th>Description</th><th>Rows per call</th></tr>
+        <tr><td>Fundwise</td><td>One row per mutual fund house</td><td>~52</td></tr>
+        <tr><td>Schemewise Categorywise</td><td>One row per scheme, grouped by category</td><td>~1,000+</td></tr>
+        <tr><td>Schemewise Typewise</td><td>One row per scheme, grouped by type</td><td>~1,000+</td></tr>
+      </table>
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+    <section id="installation">
+      <h2>Installation</h2>
+      <p>
+        The module is a single file. Copy <code>amfi_aum.py</code> into your
+        project directory. It requires three third-party packages:
+      </p>
+      <pre><code>pip install requests pandas openpyxl</code></pre>
+      <p>Python 3.10 or later is required.</p>
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+    <section id="quickstart">
+      <h2>Quick Start</h2>
+
+      <h3>List financial years and periods</h3>
+      <pre><code><span class="kw">import</span> amfi_aum
+
+years   = amfi_aum.<span class="fn">get_financial_years</span>()
+periods = amfi_aum.<span class="fn">get_periods</span>(fy_id=<span class="nb">1</span>)
+
+<span class="fn">print</span>(years[<span class="nb">0</span>])
+<span class="cm"># {"id": 1, "financial_year": "April 2025 - March 2026"}</span>
+
+<span class="fn">print</span>(periods[<span class="nb">0</span>])
+<span class="cm"># {"id": 1, "period": "January - March 2026"}</span></code></pre>
+
+      <h3>Fetch fund-level data for one period</h3>
+      <pre><code>df = amfi_aum.<span class="fn">get_fundwise_data</span>(fy_id=<span class="nb">1</span>, period_id=<span class="nb">1</span>)
+<span class="fn">print</span>(df[[<span class="st">"mutual_fund_name"</span>, <span class="st">"avg_aum_excl_domestic_fof_incl_overseas"</span>]])</code></pre>
+
+      <h3>Fetch scheme-level data for one period</h3>
+      <pre><code>df = amfi_aum.<span class="fn">get_schemewise_data</span>(
+    fy_id=<span class="nb">1</span>,
+    period_id=<span class="nb">1</span>,
+    str_type=<span class="st">"Categorywise"</span>
+)
+<span class="fn">print</span>(df[<span class="st">"scheme_category"</span>].<span class="fn">unique</span>())</code></pre>
+
+      <h3>Download everything and save to files</h3>
+      <pre><code>dfs = amfi_aum.<span class="fn">scrape_all</span>(output_dir=<span class="st">"./output"</span>)
+
+<span class="cm"># dfs is a dict with three DataFrames:</span>
+<span class="fn">print</span>(dfs[<span class="st">"fundwise"</span>].shape)
+<span class="fn">print</span>(dfs[<span class="st">"schemewise_category"</span>].shape)
+<span class="fn">print</span>(dfs[<span class="st">"schemewise_type"</span>].shape)</code></pre>
+
+      <div class="note">
+        <code>scrape_all()</code> makes approximately 240 HTTP requests.
+        With the default 0.5-second delay it takes around 4 to 5 minutes to finish.
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+    <section id="get_financial_years">
+      <h2>get_financial_years()</h2>
+
+      <div class="fn-block">
+        <div class="fn-header">
+          <span class="fn-name">get_financial_years</span><span class="fn-param">()</span>
+        </div>
+        <div class="fn-body">
+          <p>
+            Returns a list of all financial years for which AMFI has published
+            average AUM data. Use the <code>id</code> from each entry when calling
+            <code>get_periods()</code>, <code>get_fundwise_data()</code>, or
+            <code>get_schemewise_data()</code>.
+          </p>
+
+          <h3>Parameters</h3>
+          <p>This function takes no parameters.</p>
+
+          <h3>Returns</h3>
+          <p>
+            <code>list of dict</code>
+            <span class="badge badge-returns">list</span>
+          </p>
+          <table>
+            <tr><th>Key</th><th>Type</th><th>Description</th></tr>
+            <tr><td>id</td><td>int</td><td>Numeric identifier. Pass this as <code>fy_id</code> in other functions.</td></tr>
+            <tr><td>financial_year</td><td>str</td><td>Human-readable label, e.g. "April 2025 - March 2026".</td></tr>
+          </table>
+
+          <h3>Example</h3>
+          <pre><code>years = amfi_aum.<span class="fn">get_financial_years</span>()
+
+<span class="kw">for</span> y <span class="kw">in</span> years:
+    <span class="fn">print</span>(y[<span class="st">"id"</span>], y[<span class="st">"financial_year"</span>])
+
+<span class="cm"># 1  April 2025 - March 2026</span>
+<span class="cm"># 2  April 2024 - March 2025</span>
+<span class="cm"># ...</span>
+<span class="cm"># 20 April 2006 - March 2007</span></code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+    <section id="get_periods">
+      <h2>get_periods()</h2>
+
+      <div class="fn-block">
+        <div class="fn-header">
+          <span class="fn-name">get_periods</span>(<span class="fn-param">fy_id</span>,
+          <span class="fn-param">mode</span><span class="fn-default">="fundwise"</span>,
+          <span class="fn-param">str_type</span><span class="fn-default">="Categorywise"</span>)
+        </div>
+        <div class="fn-body">
+          <p>
+            Returns a list of reporting periods available for a given financial year.
+            Use the <code>id</code> from each entry as <code>period_id</code> when
+            calling <code>get_fundwise_data()</code> or <code>get_schemewise_data()</code>.
+          </p>
+
+          <h3>Parameters</h3>
+          <table>
+            <tr><th>Name</th><th>Type</th><th>Description</th></tr>
+            <tr>
+              <td>fy_id</td>
+              <td>int</td>
+              <td>Financial year ID from <code>get_financial_years()</code>.</td>
+            </tr>
+            <tr>
+              <td>mode <span class="badge badge-optional">optional</span></td>
+              <td>str</td>
+              <td>
+                Which endpoint to query. Use <code>"fundwise"</code> (default) when
+                you intend to call <code>get_fundwise_data()</code>, or
+                <code>"schemewise"</code> when you intend to call
+                <code>get_schemewise_data()</code>.
+              </td>
+            </tr>
+            <tr>
+              <td>str_type <span class="badge badge-optional">optional</span></td>
+              <td>str</td>
+              <td>
+                Only relevant when <code>mode="schemewise"</code>.
+                Either <code>"Categorywise"</code> (default) or <code>"Typewise"</code>.
+              </td>
+            </tr>
+          </table>
+
+          <h3>Returns</h3>
+          <p><code>list of dict</code></p>
+          <table>
+            <tr><th>Key</th><th>Type</th><th>Description</th></tr>
+            <tr><td>id</td><td>int</td><td>Numeric identifier. Pass this as <code>period_id</code> in data-fetch functions.</td></tr>
+            <tr><td>period</td><td>str</td><td>Human-readable label, e.g. "January - March 2026".</td></tr>
+          </table>
+
+          <h3>Example</h3>
+          <pre><code><span class="cm"># Periods for use with get_fundwise_data()</span>
+periods = amfi_aum.<span class="fn">get_periods</span>(fy_id=<span class="nb">1</span>)
+
+<span class="cm"># Periods for use with get_schemewise_data(str_type="Typewise")</span>
+periods = amfi_aum.<span class="fn">get_periods</span>(fy_id=<span class="nb">1</span>, mode=<span class="st">"schemewise"</span>, str_type=<span class="st">"Typewise"</span>)</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+    <section id="get_fundwise_data">
+      <h2>get_fundwise_data()</h2>
+
+      <div class="fn-block">
+        <div class="fn-header">
+          <span class="fn-name">get_fundwise_data</span>(<span class="fn-param">fy_id</span>,
+          <span class="fn-param">period_id</span>)
+        </div>
+        <div class="fn-body">
+          <p>
+            Fetches fund-house-level average AUM for one financial year and period.
+            Returns one row per mutual fund house plus a final "Grand Total" row.
+          </p>
+
+          <h3>Parameters</h3>
+          <table>
+            <tr><th>Name</th><th>Type</th><th>Description</th></tr>
+            <tr>
+              <td>fy_id</td>
+              <td>int</td>
+              <td>Financial year ID from <code>get_financial_years()</code>.</td>
+            </tr>
+            <tr>
+              <td>period_id</td>
+              <td>int</td>
+              <td>Period ID from <code>get_periods()</code>.</td>
+            </tr>
+          </table>
+
+          <h3>Returns</h3>
+          <p><code>pandas.DataFrame</code></p>
+          <ul class="col-list">
+            <li><span class="col-name">financial_year</span><span class="col-type">str</span><span class="col-desc">Label for the financial year.</span></li>
+            <li><span class="col-name">period</span><span class="col-type">str</span><span class="col-desc">Label for the reporting period.</span></li>
+            <li><span class="col-name">sr_no</span><span class="col-type">str</span><span class="col-desc">Serial number. "TOTAL" on the grand total row.</span></li>
+            <li><span class="col-name">mutual_fund_name</span><span class="col-type">str</span><span class="col-desc">Name of the fund house.</span></li>
+            <li><span class="col-name">avg_aum_excl_domestic_fof_incl_overseas</span><span class="col-type">float</span><span class="col-desc">Average AUM excluding domestic fund-of-funds but including overseas fund-of-funds. In INR lakhs.</span></li>
+            <li><span class="col-name">avg_aum_fof_domestic</span><span class="col-type">float</span><span class="col-desc">Average AUM from domestic fund-of-funds only. In INR lakhs.</span></li>
+          </ul>
+
+          <h3>Example</h3>
+          <pre><code>df = amfi_aum.<span class="fn">get_fundwise_data</span>(fy_id=<span class="nb">1</span>, period_id=<span class="nb">1</span>)
+<span class="fn">print</span>(df.shape)           <span class="cm"># (53, 6) for ~52 funds + 1 total row</span>
+<span class="fn">print</span>(df.columns.tolist())</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+    <section id="get_schemewise_data">
+      <h2>get_schemewise_data()</h2>
+
+      <div class="fn-block">
+        <div class="fn-header">
+          <span class="fn-name">get_schemewise_data</span>(<span class="fn-param">fy_id</span>,
+          <span class="fn-param">period_id</span>,
+          <span class="fn-param">str_type</span><span class="fn-default">="Categorywise"</span>,
+          <span class="fn-param">mf_id</span><span class="fn-default">=0</span>)
+        </div>
+        <div class="fn-body">
+          <p>
+            Fetches scheme-level average AUM for one financial year, period, and
+            grouping type. Returns one row per mutual fund scheme.
+            Rows where <code>scheme_name</code> is <code>"[FUND TOTAL]"</code>
+            are fund-house-level subtotals inserted for convenience.
+          </p>
+
+          <h3>Parameters</h3>
+          <table>
+            <tr><th>Name</th><th>Type</th><th>Description</th></tr>
+            <tr>
+              <td>fy_id</td>
+              <td>int</td>
+              <td>Financial year ID from <code>get_financial_years()</code>.</td>
+            </tr>
+            <tr>
+              <td>period_id</td>
+              <td>int</td>
+              <td>Period ID from <code>get_periods(mode="schemewise")</code>.</td>
+            </tr>
+            <tr>
+              <td>str_type <span class="badge badge-optional">optional</span></td>
+              <td>str</td>
+              <td>
+                How schemes are grouped. Either <code>"Categorywise"</code>
+                (default) or <code>"Typewise"</code>.
+                <br>Use <code>amfi_aum.SCHEMEWISE_TYPES</code> to get both values as a tuple.
+              </td>
+            </tr>
+            <tr>
+              <td>mf_id <span class="badge badge-optional">optional</span></td>
+              <td>int</td>
+              <td>
+                Fund house filter. <code>0</code> (default) returns all fund houses
+                in a single response. Pass a specific <code>strMFId</code> value
+                from a prior response to filter to one fund house.
+              </td>
+            </tr>
+          </table>
+
+          <h3>Returns</h3>
+          <p><code>pandas.DataFrame</code></p>
+          <ul class="col-list">
+            <li><span class="col-name">financial_year</span><span class="col-type">str</span><span class="col-desc">Label for the financial year.</span></li>
+            <li><span class="col-name">period</span><span class="col-type">str</span><span class="col-desc">Label for the reporting period.</span></li>
+            <li><span class="col-name">type</span><span class="col-type">str</span><span class="col-desc">"Categorywise" or "Typewise".</span></li>
+            <li><span class="col-name">mf_id</span><span class="col-type">str</span><span class="col-desc">Fund house identifier as returned by AMFI.</span></li>
+            <li><span class="col-name">mutual_fund_name</span><span class="col-type">str</span><span class="col-desc">Name of the fund house.</span></li>
+            <li><span class="col-name">scheme_category</span><span class="col-type">str</span><span class="col-desc">Scheme category description.</span></li>
+            <li><span class="col-name">scheme_name</span><span class="col-type">str</span><span class="col-desc">Full scheme name as registered with AMFI. "[FUND TOTAL]" on subtotal rows.</span></li>
+            <li><span class="col-name">amfi_code</span><span class="col-type">int</span><span class="col-desc">Unique AMFI scheme code. Null on subtotal rows.</span></li>
+            <li><span class="col-name">avg_aum_excl_domestic_fof_incl_overseas</span><span class="col-type">float</span><span class="col-desc">Average AUM excluding domestic fund-of-funds but including overseas fund-of-funds. In INR lakhs.</span></li>
+            <li><span class="col-name">avg_aum_fof_domestic</span><span class="col-type">float</span><span class="col-desc">Average AUM from domestic fund-of-funds only. In INR lakhs.</span></li>
+          </ul>
+
+          <h3>Example</h3>
+          <pre><code><span class="cm"># Fetch Typewise grouping</span>
+df = amfi_aum.<span class="fn">get_schemewise_data</span>(
+    fy_id=<span class="nb">1</span>,
+    period_id=<span class="nb">1</span>,
+    str_type=<span class="st">"Typewise"</span>
+)
+
+<span class="cm"># Filter out subtotal rows</span>
+schemes_only = df[df[<span class="st">"scheme_name"</span>] != <span class="st">"[FUND TOTAL]"</span>]
+<span class="fn">print</span>(schemes_only.shape)</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+    <section id="scrape_all">
+      <h2>scrape_all()</h2>
+
+      <div class="fn-block">
+        <div class="fn-header">
+          <span class="fn-name">scrape_all</span>(<span class="fn-param">output_dir</span><span class="fn-default">=None</span>,
+          <span class="fn-param">delay</span><span class="fn-default">=0.5</span>)
+        </div>
+        <div class="fn-body">
+          <p>
+            Downloads all available AUM data across every financial year, period,
+            and grouping mode. Returns the results as a dictionary of three
+            DataFrames and optionally saves them to files.
+          </p>
+          <p>
+            This is the main entry point when you want a complete data extract.
+            It iterates through all 20 financial years, all periods within each
+            year, and all three modes (Fundwise, Schemewise Categorywise,
+            Schemewise Typewise).
+          </p>
+
+          <div class="note">
+            This function makes approximately 240 HTTP requests.
+            With the default 0.5-second delay it takes around 4 to 5 minutes.
+          </div>
+
+          <h3>Parameters</h3>
+          <table>
+            <tr><th>Name</th><th>Type</th><th>Description</th></tr>
+            <tr>
+              <td>output_dir <span class="badge badge-optional">optional</span></td>
+              <td>str</td>
+              <td>
+                Directory where CSV and Excel files will be saved.
+                Pass <code>None</code> (default) to skip saving and only get the
+                DataFrames back.
+              </td>
+            </tr>
+            <tr>
+              <td>delay <span class="badge badge-optional">optional</span></td>
+              <td>float</td>
+              <td>
+                Seconds to wait between HTTP requests. Default is <code>0.5</code>.
+                Increase this if the server returns errors.
+              </td>
+            </tr>
+          </table>
+
+          <h3>Returns</h3>
+          <p><code>dict</code> with the following keys:</p>
+          <table>
+            <tr><th>Key</th><th>Value</th></tr>
+            <tr><td>fundwise</td><td>DataFrame with fund-house-level data for all periods.</td></tr>
+            <tr><td>schemewise_category</td><td>DataFrame with scheme-level Categorywise data for all periods.</td></tr>
+            <tr><td>schemewise_type</td><td>DataFrame with scheme-level Typewise data for all periods.</td></tr>
+          </table>
+
+          <p>
+            When <code>output_dir</code> is provided, the following files are also written:
+          </p>
+          <table>
+            <tr><th>File</th><th>Contents</th></tr>
+            <tr><td>amfi_aum_fundwise.csv</td><td>Fundwise DataFrame as CSV.</td></tr>
+            <tr><td>amfi_aum_schemewise_category.csv</td><td>Schemewise Categorywise DataFrame as CSV.</td></tr>
+            <tr><td>amfi_aum_schemewise_type.csv</td><td>Schemewise Typewise DataFrame as CSV.</td></tr>
+            <tr><td>amfi_aum_all.xlsx</td><td>All three DataFrames as separate sheets in one workbook.</td></tr>
+          </table>
+
+          <h3>Example</h3>
+          <pre><code><span class="cm"># Download everything and save to ./output/</span>
+dfs = amfi_aum.<span class="fn">scrape_all</span>(output_dir=<span class="st">"./output"</span>)
+
+<span class="cm"># Use the DataFrames without saving</span>
+dfs = amfi_aum.<span class="fn">scrape_all</span>()
+fw  = dfs[<span class="st">"fundwise"</span>]
+cat = dfs[<span class="st">"schemewise_category"</span>]
+typ = dfs[<span class="st">"schemewise_type"</span>]</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+    <section id="export_to_csv">
+      <h2>export_to_csv()</h2>
+
+      <div class="fn-block">
+        <div class="fn-header">
+          <span class="fn-name">export_to_csv</span>(<span class="fn-param">dataframes</span>,
+          <span class="fn-param">output_dir</span>)
+        </div>
+        <div class="fn-body">
+          <p>
+            Saves a dictionary of DataFrames to individual CSV files.
+            One CSV file is created per DataFrame. The output directory is
+            created automatically if it does not exist.
+          </p>
+
+          <h3>Parameters</h3>
+          <table>
+            <tr><th>Name</th><th>Type</th><th>Description</th></tr>
+            <tr>
+              <td>dataframes</td>
+              <td>dict</td>
+              <td>
+                A dictionary mapping a name string to a <code>pandas.DataFrame</code>.
+                Typically the return value of <code>scrape_all()</code>.
+              </td>
+            </tr>
+            <tr>
+              <td>output_dir</td>
+              <td>str</td>
+              <td>Directory where files will be written.</td>
+            </tr>
+          </table>
+
+          <h3>Returns</h3>
+          <p><code>list of str</code> - the absolute paths of the files written.</p>
+
+          <h3>Example</h3>
+          <pre><code>dfs   = amfi_aum.<span class="fn">scrape_all</span>()
+paths = amfi_aum.<span class="fn">export_to_csv</span>(dfs, output_dir=<span class="st">"./output"</span>)
+<span class="kw">for</span> p <span class="kw">in</span> paths:
+    <span class="fn">print</span>(p)</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+    <section id="export_to_excel">
+      <h2>export_to_excel()</h2>
+
+      <div class="fn-block">
+        <div class="fn-header">
+          <span class="fn-name">export_to_excel</span>(<span class="fn-param">dataframes</span>,
+          <span class="fn-param">output_dir</span>)
+        </div>
+        <div class="fn-body">
+          <p>
+            Saves a dictionary of DataFrames to a single Excel workbook.
+            Each DataFrame becomes one sheet. The output directory is created
+            automatically if it does not exist.
+          </p>
+
+          <h3>Parameters</h3>
+          <table>
+            <tr><th>Name</th><th>Type</th><th>Description</th></tr>
+            <tr>
+              <td>dataframes</td>
+              <td>dict</td>
+              <td>
+                A dictionary mapping a name string to a <code>pandas.DataFrame</code>.
+                Typically the return value of <code>scrape_all()</code>.
+              </td>
+            </tr>
+            <tr>
+              <td>output_dir</td>
+              <td>str</td>
+              <td>Directory where the Excel file will be written.</td>
+            </tr>
+          </table>
+
+          <h3>Returns</h3>
+          <p><code>str</code> - the absolute path of the Excel file written.</p>
+
+          <h3>Example</h3>
+          <pre><code>dfs  = amfi_aum.<span class="fn">scrape_all</span>()
+path = amfi_aum.<span class="fn">export_to_excel</span>(dfs, output_dir=<span class="st">"./output"</span>)
+<span class="fn">print</span>(path)  <span class="cm"># /absolute/path/to/output/amfi_aum_all.xlsx</span></code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+    <section id="columns">
+      <h2>Column Reference</h2>
+      <p>
+        All monetary values are in Indian Rupees (INR) expressed in lakhs
+        (1 lakh = 100,000).
+      </p>
+
+      <h3>Fundwise DataFrame columns</h3>
+      <table>
+        <tr><th>Column</th><th>Type</th><th>Description</th></tr>
+        <tr><td>financial_year</td><td>str</td><td>e.g. "April 2025 - March 2026"</td></tr>
+        <tr><td>period</td><td>str</td><td>e.g. "January - March 2026"</td></tr>
+        <tr><td>sr_no</td><td>str</td><td>Serial number. "TOTAL" on the grand total row.</td></tr>
+        <tr><td>mutual_fund_name</td><td>str</td><td>Fund house name.</td></tr>
+        <tr><td>avg_aum_excl_domestic_fof_incl_overseas</td><td>float</td><td>Main AUM figure (INR lakhs).</td></tr>
+        <tr><td>avg_aum_fof_domestic</td><td>float</td><td>Domestic fund-of-funds AUM (INR lakhs).</td></tr>
+      </table>
+
+      <h3>Schemewise DataFrame columns</h3>
+      <table>
+        <tr><th>Column</th><th>Type</th><th>Description</th></tr>
+        <tr><td>financial_year</td><td>str</td><td>e.g. "April 2025 - March 2026"</td></tr>
+        <tr><td>period</td><td>str</td><td>e.g. "January - March 2026"</td></tr>
+        <tr><td>type</td><td>str</td><td>"Categorywise" or "Typewise"</td></tr>
+        <tr><td>mf_id</td><td>str</td><td>Fund house ID as returned by AMFI.</td></tr>
+        <tr><td>mutual_fund_name</td><td>str</td><td>Fund house name.</td></tr>
+        <tr><td>scheme_category</td><td>str</td><td>Scheme category description.</td></tr>
+        <tr><td>scheme_name</td><td>str</td><td>Full scheme name. "[FUND TOTAL]" on subtotal rows.</td></tr>
+        <tr><td>amfi_code</td><td>int</td><td>Unique AMFI scheme code. Null on subtotal rows.</td></tr>
+        <tr><td>avg_aum_excl_domestic_fof_incl_overseas</td><td>float</td><td>Main AUM figure (INR lakhs).</td></tr>
+        <tr><td>avg_aum_fof_domestic</td><td>float</td><td>Domestic fund-of-funds AUM (INR lakhs).</td></tr>
+      </table>
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+    <section id="ids">
+      <h2>ID Lookup</h2>
+      <p>
+        Financial year IDs and period IDs are assigned by AMFI and may change
+        if AMFI adds historical data. Always call <code>get_financial_years()</code>
+        and <code>get_periods()</code> at runtime rather than hard-coding IDs.
+      </p>
+      <p>
+        As of May 2026 the financial year IDs run from 1 (most recent,
+        April 2025 - March 2026) to 20 (oldest, April 2006 - March 2007).
+      </p>
+      <p>
+        Period IDs within each financial year start at 1 for the most recent
+        quarter and increment as you go backwards in time.
+      </p>
+
+      <h3>Iterating all combinations</h3>
+      <pre><code><span class="kw">import</span> amfi_aum
+
+<span class="kw">for</span> fy <span class="kw">in</span> amfi_aum.<span class="fn">get_financial_years</span>():
+    periods = amfi_aum.<span class="fn">get_periods</span>(fy[<span class="st">"id"</span>])
+    <span class="kw">for</span> p <span class="kw">in</span> periods:
+        df = amfi_aum.<span class="fn">get_fundwise_data</span>(fy[<span class="st">"id"</span>], p[<span class="st">"id"</span>])
+        <span class="fn">print</span>(fy[<span class="st">"financial_year"</span>], p[<span class="st">"period"</span>], df.shape)</code></pre>
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+    <section id="errors">
+      <h2>Error Handling</h2>
+      <p>
+        All HTTP calls go through the internal <code>_get()</code> helper which
+        retries up to 3 times with an exponential back-off (2, 4, 6 seconds).
+        After all retries are exhausted it prints a warning and returns an empty
+        dict. Data functions that receive an empty dict return an empty DataFrame.
+      </p>
+      <p>
+        <code>scrape_all()</code> raises a <code>RuntimeError</code> if the
+        initial financial-years call fails, because nothing can proceed without it.
+        All other failures produce empty DataFrames for the affected periods and
+        are logged to stdout.
+      </p>
+      <p>
+        The AMFI API does not require authentication and has no published rate
+        limit. A delay of 0.5 seconds between requests has been observed to be
+        reliable. If you encounter HTTP 429 or 5xx errors, increase the
+        <code>delay</code> parameter in <code>scrape_all()</code>.
+      </p>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // Highlight the current section in the sidebar as the user scrolls
+  const links = document.querySelectorAll('nav a[href^="#"]');
+  const sections = Array.from(links).map(l => document.querySelector(l.getAttribute('href')));
+
+  function updateActive() {
+    let active = sections[0];
+    sections.forEach(s => { if (s && s.getBoundingClientRect().top <= 80) active = s; });
+    links.forEach(l => l.classList.remove('active'));
+    const cur = document.querySelector(`nav a[href="#${active?.id}"]`);
+    if (cur) cur.classList.add('active');
+  }
+
+  window.addEventListener('scroll', updateActive, { passive: true });
+  updateActive();
+</script>
+
+</body>
+</html>
